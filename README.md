@@ -1,52 +1,38 @@
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-////////////////////////
-
-" Vim-plug ile eklentileri yükle
 call plug#begin('~/.vim/plugged')
 
-" Genel Geliştirme Araçları
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " Otomatik tamamlama ve LSP desteği
-Plug 'preservim/nerdtree' " Dosya gezgini
-Plug 'Xuyuanp/nerdtree-git-plugin' " NERDTree'de Git durumu
-Plug 'tpope/vim-fugitive' " Git entegrasyonu
-Plug 'airblade/vim-gitgutter' " Git değişikliklerini göster
-Plug 'vim-airline/vim-airline' " Durum çubuğu
-Plug 'vim-airline/vim-airline-themes' " Durum çubuğu temaları
-Plug 'tpope/vim-commentary' " Kod yorumlama
-Plug 'jiangmiao/auto-pairs' " Otomatik parantez kapatma
-Plug 'alvan/vim-closetag' " HTML/JSX otomatik tag kapatma
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
+Plug 'alvan/vim-closetag'
+Plug 'ctrlpvim/ctrlp.vim'
 
-" JavaScript/React/Next.js
-Plug 'pangloss/vim-javascript' " JavaScript syntax
-Plug 'maxmellon/vim-jsx-pretty' " JSX syntax
-Plug 'leafgarland/typescript-vim' " TypeScript syntax
-Plug 'peitalin/vim-jsx-typescript' " TSX syntax
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' } " Styled Components
+Plug 'pangloss/vim-javascript'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
-" PHP
-Plug 'StanAngeloff/php.vim' " PHP syntax
-Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'} " PHP LSP desteği
+Plug 'StanAngeloff/php.vim'
+Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
 
-" CSS/Tailwind/Bootstrap
-Plug 'ap/vim-css-color' " CSS renk önizleme
-Plug 'iamcco/coc-tailwindcss', {'do': 'npm install'} " Tailwind CSS desteği
-Plug 'hail2u/vim-css3-syntax' " CSS3 syntax
-Plug 'bootstrap-vim/bootstrap-vim' " Bootstrap syntax
+Plug 'ap/vim-css-color'
+Plug 'iamcco/coc-tailwindcss', {'do': 'npm install'}
+Plug 'hail2u/vim-css3-syntax'
 
-" FZF (Fuzzy Finder)
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " FZF kurulumu
-Plug 'junegunn/fzf.vim' " FZF Vim entegrasyonu
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
-" Diğer Araçlar
-Plug 'dense-analysis/ale' " Linting ve formatlama
-Plug 'prettier/vim-prettier', { 'do': 'npm install' } " Prettier formatlama
-Plug 'puremourning/vimspector' " Debugger
+Plug 'dense-analysis/ale'
+Plug 'puremourning/vimspector'
 
 call plug#end()
 
-" Temel Ayarlar
 set number
 set relativenumber
 syntax on
@@ -68,12 +54,10 @@ set undodir=~/.vim/undodir
 set autoread
 set clipboard=unnamedplus
 
-" Coc.nvim Ayarları
 let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-json',
   \ 'coc-eslint',
-  \ 'coc-prettier',
   \ 'coc-phpactor',
   \ 'coc-css',
   \ 'coc-tailwindcss',
@@ -82,33 +66,20 @@ let g:coc_global_extensions = [
   \ 'coc-pairs',
   \ ]
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <Tab> pumvisible() ? "<C-n>" : "<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "<C-p>" : "<C-h>"
+inoremap <expr> <CR> pumvisible() ? "<C-y>" : "<C-g>u<CR>"
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Prettier Formatlama
-command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
-
-" ALE Linting Ayarları
 let g:ale_fixers = {
-  \ 'javascript': ['eslint', 'prettier'],
-  \ 'typescript': ['eslint', 'prettier'],
+  \ 'javascript': ['eslint'],
+  \ 'typescript': ['eslint'],
   \ 'php': ['php_cs_fixer'],
-  \ 'css': ['prettier'],
+  \ 'css': [],
   \ }
 
 let g:ale_linters = {
@@ -122,29 +93,24 @@ let g:ale_fix_on_save = 1
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 
-" Vimspector Debugger Ayarları
 let g:vimspector_enable_mappings = 'HUMAN'
-nmap <Leader>dd :call vimspector#Launch()<CR>
-nmap <Leader>de :call vimspector#Reset()<CR>
-nmap <Leader>dc :call vimspector#Continue()<CR>
-nmap <Leader>dt :call vimspector#ToggleBreakpoint()<CR>
-nmap <Leader>dT :call vimspector#ClearBreakpoints()<CR>
+nmap <leader>dd :call vimspector#Launch()<CR>
+nmap <leader>de :call vimspector#Reset()<CR>
+nmap <leader>dc :call vimspector#Continue()<CR>
+nmap <leader>dt :call vimspector#ToggleBreakpoint()<CR>
+nmap <leader>dT :call vimspector#ClearBreakpoints()<CR>
 
-" NERDTree Ayarları
 nnoremap <C-n> :NERDTreeToggle<CR>
 
-" FZF Ayarları
 nnoremap <C-p> :Files<CR>
 nnoremap <C-f> :Rg<CR>
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-g> :GFiles<CR>
 
-" Prettier Formatlama Kısayolu
-nnoremap <Leader>p :Prettier<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+set clipboard=unnamed
 
-" Dosya Kaydetme ve Çıkış
-nnoremap <C-s> :w<CR>
-nnoremap <C-q> :q<CR>
 
 //////////////7
 
